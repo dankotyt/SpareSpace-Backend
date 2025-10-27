@@ -40,13 +40,20 @@ export class AuthService {
     if (exists) throw new ConflictException('Phone already exists');
   }
 
+  async checkPhoneForLogin(phone: string): Promise<{ exists: boolean }> {
+    const user = await this.userRepository.findOneBy({ phone });
+    return { exists: !!user };
+  }
+
   private async createUser(dto: RegisterDto) {
     const hash = await bcrypt.hash(dto.password, this.BCRYPT_SALT_ROUNDS);
     const user = this.userRepository.create({
       email: dto.email,
       phone: dto.phone,
       password_hash: hash,
-      full_name: dto.full_name,
+      first_name: dto.first_name,
+      last_name: dto.last_name,
+      patronymic: dto.patronymic,
     });
     return this.userRepository.save(user);
   }
@@ -85,7 +92,7 @@ export class AuthService {
   private async validateUser(dto: LoginDto) {
     const user = await this.userRepository.findOneBy({ email: dto.email });
     if (!user || !(await bcrypt.compare(dto.password, user.password_hash))) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Пользователь не найден! Проверьте логин или пароль');
     }
     return user;
   }

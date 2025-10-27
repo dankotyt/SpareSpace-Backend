@@ -13,5 +13,12 @@ export class RegisterDto {
   password: string;
 
   @IsString()
-  full_name: string;
+  first_name: string;
+
+  @IsString()
+  last_name: string;
+
+  @IsOptional()
+  @IsString()
+  patronymic?: string;
 }

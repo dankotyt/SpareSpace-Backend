@@ -2,7 +2,6 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -28,4 +27,8 @@ export class AuthController {
     return this.authService.logout(refreshToken);
   }
 
+  @Post('check-phone-login')
+  async checkPhoneForLogin(@Body() dto: { phone: string }) {
+    return this.authService.checkPhoneForLogin(dto.phone);
+  }
 }

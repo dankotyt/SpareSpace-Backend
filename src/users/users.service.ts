@@ -16,19 +16,31 @@ export class UserService {
   async findById(id: number) {
     const user = await this.userRepository.findOne({
       where: { id },
-      select: ['id', 'full_name', 'rating', 'created_at', 'verified', 'created_at']
+      select: ['id', 'first_name', 'last_name', 'patronymic', 'rating', 'created_at', 'verified', 'created_at']
     });
     if (!user) throw new NotFoundException('User not found');
-    return user;
+
+    return {
+      ...user,
+      rating: user.rating || 0
+    };
   }
 
   async findPrivateProfile(id: number) {
     const user = await this.userRepository.findOne({
       where: { id },
-      select: ['id', 'email', 'phone', 'full_name', 'rating', 'two_fa_enabled', 'verified', 'created_at', 'updated_at'] // все приватные поля
+      select: ['id', 'email', 'phone', 'first_name', 'last_name', 'patronymic', 'rating', 'two_fa_enabled', 'verified', 'created_at', 'updated_at']
     });
     if (!user) throw new NotFoundException('User not found');
-    return user;
+
+    return {
+      ...user,
+      rating: user.rating || 0
+    };
+  }
+
+  getFullName(user: User): string {
+    return `${user.first_name} ${user.last_name} ${user.patronymic || ''}`.trim();
   }
 
   async findByEmail(email: string) {

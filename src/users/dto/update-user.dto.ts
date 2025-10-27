@@ -3,7 +3,15 @@ import { IsString, IsOptional, MinLength, Matches, IsBoolean } from 'class-valid
 export class UpdateUserDto {
   @IsString()
   @IsOptional()
-  full_name?: string;
+  first_name?: string;
+
+  @IsString()
+  @IsOptional()
+  last_name?: string;
+
+  @IsString()
+  @IsOptional()
+  patronymic?: string;
 
   @IsString()
   @IsOptional()

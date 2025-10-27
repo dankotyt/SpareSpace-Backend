@@ -15,9 +15,15 @@ export class User {
   password_hash: string;
 
   @Column()
-  full_name: string;
+  first_name: string;
 
-  @Column({ type: 'decimal', precision: 3, scale: 2, nullable: true })
+  @Column()
+  last_name: string;
+
+  @Column({ nullable: true })
+  patronymic?: string;
+
+  @Column({ type: 'decimal', precision: 3, scale: 2, nullable: true, default: 0 })
   rating: number;
 
   @Column({ default: false })
@@ -31,4 +37,8 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
+
+  get full_name(): string {
+    return `${this.first_name} ${this.last_name} ${this.patronymic || ''}`.trim();
+  }
 }
