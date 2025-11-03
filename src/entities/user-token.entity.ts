@@ -11,7 +11,7 @@ export class UserToken {
   user: User;
 
   @Column()
-  refresh_token_hash: string;
+  refreshTokenHash: string;
 
   @Column({ type: 'timestamptz' })
   expiry: Date;
@@ -20,8 +20,8 @@ export class UserToken {
   revoked: boolean;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updated_at: Date;
+  updatedAt: Date;
 }

@@ -13,18 +13,18 @@ export class Review {
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'from_user_id' })
-  from_user: User;
+  fromUser: User;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'to_user_id' })
-  to_user: User;
+  toUser: User;
 
   @Column({ type: 'int' })
   rating: number;
 
   @Column({ type: 'text', nullable: true })
-  text: string;
+  text?: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  createdAt: Date;
 }

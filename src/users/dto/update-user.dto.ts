@@ -1,29 +1,35 @@
-import { IsString, IsOptional, MinLength, Matches, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, MinLength, MaxLength, Matches, IsBoolean } from 'class-validator';
 
 export class UpdateUserDto {
-  @IsString()
   @IsOptional()
-  first_name?: string;
+  @IsString()
+  @MinLength(1)
+  @MaxLength(50)
+  firstName?: string;
 
-  @IsString()
   @IsOptional()
-  last_name?: string;
+  @IsString()
+  @MinLength(1)
+  @MaxLength(50)
+  lastName?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
+  @MinLength(1)
+  @MaxLength(50)
   patronymic?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   @MinLength(10)
   @Matches(/^\+?[1-9]\d{1,14}$/, { message: 'Invalid phone format' })
   phone?: string;
 
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   verified?: boolean;
 
-  @IsBoolean()
   @IsOptional()
-  two_fa_enabled?: boolean;
+  @IsBoolean()
+  twoFaEnabled?: boolean;
 }

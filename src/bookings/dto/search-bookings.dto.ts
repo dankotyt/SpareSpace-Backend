@@ -1,22 +1,26 @@
 import { IsInt, IsEnum, IsOptional, Min, IsPositive } from 'class-validator';
 import { BookingStatus } from '../../common/enums/booking-status.enum';
+import { Type } from 'class-transformer';
 
 export class SearchBookingsDto {
+  @IsOptional()
+  @Type(() => Number)
   @IsInt()
-  @IsOptional()
-  user_id?: number;
+  userId?: number;
 
-  @IsEnum(BookingStatus)
   @IsOptional()
+  @IsEnum(BookingStatus)
   status?: BookingStatus;
   
-  @IsInt()
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
   @Min(1)
   limit?: number = 10;
 
-  @IsInt()
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
   @Min(0)
   offset?: number = 0;
 }

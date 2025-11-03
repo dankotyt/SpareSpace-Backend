@@ -1,21 +1,26 @@
 import { IsInt, IsOptional, Min } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class SearchReviewsDto {
-  @IsInt()
   @IsOptional()
-  to_user_id?: number;
+  @Type(() => Number)
+  @IsInt()
+  toUserId?: number;
 
-  @IsInt()
   @IsOptional()
-  listing_id?: number;
+  @Type(() => Number)
+  @IsInt()
+  listingId?: number;
 
-  @IsInt()
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
   @Min(1)
   limit?: number = 10;
 
-  @IsInt()
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
   @Min(0)
   offset?: number = 0;
 }

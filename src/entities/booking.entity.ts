@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn  } from 'typeorm';
 import { User } from './user.entity';
 import { Listing } from './listing.entity';
 import { CurrencyType } from '../common/enums/currency-type.enum';
@@ -21,7 +21,7 @@ export class Booking {
   period: string;
 
   @Column({ type: 'decimal', precision: 26, scale: 16 })
-  price_total: number;
+  priceTotal: number;
 
   @Column({ type: 'enum', enum: CurrencyType, enumName: 'currency_type', default: CurrencyType.RUB })
   currency: CurrencyType;
@@ -30,8 +30,8 @@ export class Booking {
   status: BookingStatus;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updated_at: Date;
+  updatedAt: Date;
 }

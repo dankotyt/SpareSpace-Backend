@@ -16,5 +16,5 @@ export class ViewHistory {
   listing: Listing;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  viewed_at: Date;
+  viewedAt: Date;
 }

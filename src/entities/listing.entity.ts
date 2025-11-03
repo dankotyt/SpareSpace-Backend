@@ -21,31 +21,31 @@ export class Listing {
   title: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description?: string;
 
   @Column({ type: 'decimal', precision: 26, scale: 16 })
   price: number;
 
   @Column({ type: 'enum', enum: ListingPeriodType, enumName: 'listing_period_type', default: ListingPeriodType.DAY })
-  price_period: ListingPeriodType;
+  pricePeriod: ListingPeriodType;
 
   @Column({ type: 'enum', enum: CurrencyType, enumName: 'currency_type', default: CurrencyType.RUB })
   currency: CurrencyType;
 
   @Column({ type: 'geometry', srid: 4326, nullable: true })
-  location: string;
+  location?: string;
 
   @Column()
   address: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  size: number;
+  size?: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  photos_json: any;
+  photosJson?: any;
 
   @Column({ type: 'jsonb', nullable: true })
-  amenities: any;
+  amenities?: any;
 
   @Column({ type: 'tsrange', array: true, default: '{}' })
   availability: string[];
@@ -54,17 +54,17 @@ export class Listing {
   status: ListingStatus;
 
   @Column({ default: 0 })
-  views_count: number;
+  viewsCount: number;
 
   @Column({ default: 0 })
-  reposts_count: number;
+  repostsCount: number;
 
   @Column({ default: 0 })
-  favorites_count: number;
+  favoritesCount: number;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updated_at: Date;
+  updatedAt: Date;
 }

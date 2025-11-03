@@ -1,15 +1,17 @@
-import { IsString, IsEnum, IsNumber, IsOptional, IsArray, Min, Max, IsObject, ValidateNested } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsNumber, IsOptional, IsArray, IsDate, Min, Max, IsObject, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ListingType } from '../../common/enums/listing-type.enum';
 import { CurrencyType } from '../../common/enums/currency-type.enum';
 import { ListingPeriodType } from '../../common/enums/listing-period-type.enum';
 
 class AvailabilityPeriodDto {
-  @IsString()
-  start: string;
+  @Type(() => Date)
+  @IsDate()
+  start: Date;
 
-  @IsString()
-  end: string;
+  @Type(() => Date)
+  @IsDate()
+  end: Date;
 }
 
 export class CreateListingDto {
@@ -17,53 +19,56 @@ export class CreateListingDto {
   type: ListingType;
 
   @IsString()
+  @IsNotEmpty()
   title: string;
 
-  @IsString()
   @IsOptional()
-  description: string;
+  @IsString()
+  @IsNotEmpty()
+  description?: string;
 
   @IsNumber()
   @Min(0)
   price: number;
 
   @IsEnum(ListingPeriodType)
-  price_period: ListingPeriodType = ListingPeriodType.HOUR;
+  pricePeriod: ListingPeriodType = ListingPeriodType.HOUR;
 
   @IsEnum(CurrencyType)
   currency: CurrencyType = CurrencyType.RUB;
 
-  @IsNumber()
   @IsOptional()
+  @IsNumber()
   @Min(-90)
   @Max(90)
-  latitude: number;
+  latitude?: number;
 
-  @IsNumber()
   @IsOptional()
+  @IsNumber()
   @Min(-180)
   @Max(180)
-  longitude: number;
+  longitude?: number;
 
   @IsString()
+  @IsNotEmpty()
   address: string;
 
+  @IsOptional()
   @IsNumber()
   @Min(0)
-  @IsOptional()
-  size: number;
+  size?: number;
 
+  @IsOptional()
   @IsArray()
-  @IsOptional()
-  photos_json: string[];
+  photosJson?: string[];
 
+  @IsOptional()
   @IsObject()
-  @IsOptional()
-  amenities: any;
+  amenities?: any;
 
-  @IsArray()
   @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => AvailabilityPeriodDto)
-  availability: AvailabilityPeriodDto[];
+  availability?: AvailabilityPeriodDto[];
 }

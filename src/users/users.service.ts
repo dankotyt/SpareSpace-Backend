@@ -7,7 +7,7 @@ import { UserRoleType } from '../common/enums/user-role-type.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(UserRole) private userRoleRepository: Repository<UserRole>,
@@ -16,40 +16,32 @@ export class UserService {
   async findById(id: number) {
     const user = await this.userRepository.findOne({
       where: { id },
-      select: ['id', 'first_name', 'last_name', 'patronymic', 'rating', 'created_at', 'verified', 'created_at']
+      select: ['id', 'firstName', 'lastName', 'patronymic', 'rating', 'verified', 'createdAt']
     });
     if (!user) throw new NotFoundException('User not found');
-
-    return {
-      ...user,
-      rating: user.rating || 0
-    };
+    return user;
   }
 
   async findPrivateProfile(id: number) {
     const user = await this.userRepository.findOne({
       where: { id },
-      select: ['id', 'email', 'phone', 'first_name', 'last_name', 'patronymic', 'rating', 'two_fa_enabled', 'verified', 'created_at', 'updated_at']
+      select: ['id', 'email', 'phone', 'firstName', 'lastName', 'patronymic', 'rating', 'twoFaEnabled', 'verified', 'createdAt', 'updatedAt'] // все приватные поля
     });
     if (!user) throw new NotFoundException('User not found');
-
-    return {
-      ...user,
-      rating: user.rating || 0
-    };
+    return user;
   }
-
-  getFullName(user: User): string {
-    return `${user.first_name} ${user.last_name} ${user.patronymic || ''}`.trim();
-  }
-
-  async findByEmail(email: string) {
-    return this.userRepository.findOneBy({ email });
-  }
-
-  async update(id: number, dto: UpdateUserDto) {
-    const user = await this.findPrivateProfile(id);
-    Object.assign(user, dto);
+  
+  async update(userId: number, dto: UpdateUserDto) {
+    const user = await this.findPrivateProfile(userId);
+    if (dto.firstName !== undefined) user.firstName = dto.firstName;
+    if (dto.lastName !== undefined) user.lastName = dto.lastName;
+    if (dto.patronymic !== undefined) user.patronymic = dto.patronymic;
+    if (dto.phone !== undefined) user.phone = dto.phone;
+    
+    if (await this.hasRole(userId, UserRoleType.ADMIN)) {
+        if (dto.verified !== undefined) user.verified = dto.verified;
+        if (dto.twoFaEnabled !== undefined) user.twoFaEnabled = dto.twoFaEnabled;
+    }
     return this.userRepository.save(user);
   }
 

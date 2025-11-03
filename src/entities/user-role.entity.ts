@@ -15,5 +15,5 @@ export class UserRole {
   role: UserRoleType;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  assigned_at: Date;
+  assignedAt: Date;
 }

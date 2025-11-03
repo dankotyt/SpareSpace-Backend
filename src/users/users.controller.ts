@@ -1,5 +1,5 @@
 import { Controller, Get, Patch, Body, Param, UseGuards, Delete, Post, UnauthorizedException } from '@nestjs/common';
-import { UserService } from './users.service';
+import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { User } from '../common/decorators/user.decorator';
@@ -9,7 +9,7 @@ import { UserRoleType } from '../common/enums/user-role-type.enum';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UsersService) {}
 
   @Get(':id')
   findOne(@Param('id') id: string) {

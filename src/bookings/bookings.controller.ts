@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete, Query, UseGuards, HttpCode } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -6,6 +6,7 @@ import { ChangeStatusDto } from './dto/change-status.dto';
 import { SearchBookingsDto } from './dto/search-bookings.dto';
 import { User } from '../common/decorators/user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AtLeastOneFieldPipe } from './pipes/at-least-one-field.pipe';
 
 @Controller('bookings')
 @UseGuards(JwtAuthGuard)
@@ -13,6 +14,7 @@ export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
   @Post()
+  @HttpCode(201)
   create(@Body() createBookingDto: CreateBookingDto, @User('userId') userId: number) {
     return this.bookingsService.create(createBookingDto, userId);
   }
@@ -28,7 +30,7 @@ export class BookingsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto, @User('userId') userId: number) {
+  update(@Param('id') id: string, @Body(AtLeastOneFieldPipe) updateBookingDto: UpdateBookingDto, @User('userId') userId: number) {
     return this.bookingsService.update(+id, updateBookingDto, userId);
   }
 

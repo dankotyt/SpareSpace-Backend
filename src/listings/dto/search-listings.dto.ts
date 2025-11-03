@@ -2,58 +2,66 @@ import { IsEnum, IsNumber, IsOptional, Min, Max, IsObject } from 'class-validato
 import { ListingType } from '../../common/enums/listing-type.enum';
 import { CurrencyType } from '../../common/enums/currency-type.enum';
 import { ListingPeriodType } from '../../common/enums/listing-period-type.enum';
+import { Type } from 'class-transformer';
 
 export class SearchListingsDto {
+  @IsOptional()
   @IsEnum(ListingType)
-  @IsOptional()
-  type: ListingType;
+  type?: ListingType;
 
+  @IsOptional()
   @IsEnum(CurrencyType)
-  @IsOptional()
-  currency: CurrencyType;
+  currency?: CurrencyType;
 
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
-  @IsOptional()
-  minPrice: number;
+  minPrice?: number;
 
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
-  @IsOptional()
-  maxPrice: number;
+  maxPrice?: number;
 
+  @IsOptional()
   @IsEnum(ListingPeriodType)
-  @IsOptional()
-  price_period: ListingPeriodType;
+  pricePeriod?: ListingPeriodType;
 
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Min(-90)
   @Max(90)
-  @IsOptional()
-  latitude: number;
+  latitude?: number;
 
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Min(-180)
   @Max(180)
-  @IsOptional()
-  longitude: number;
+  longitude?: number;
 
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
-  @IsOptional()
-  radius: number;
+  radius?: number;
 
+  @IsOptional()
   @IsObject()
-  @IsOptional()
-  amenities: any;
+  amenities?: any;
 
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Min(1)
-  @IsOptional()
-  limit: number = 10;
+  limit?: number = 10;
 
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
-  @IsOptional()
-  offset: number = 0;
+  offset?: number = 0;
 }

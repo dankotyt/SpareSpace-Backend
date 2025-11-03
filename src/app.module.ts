@@ -3,24 +3,24 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import * as path from 'path';
+
 import { AuthModule } from './auth/auth.module';
-import { User } from './entities/user.entity';
-import { UserToken } from './entities/user-token.entity';
-import { Listing } from './entities/listing.entity';
-import { ViewHistory } from './entities/view-history.entity';
-import { Booking } from './entities/booking.entity';
-import { Review } from './entities/review.entity';
 import { ListingsModule } from './listings/listings.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { UsersModule } from './users/users.module';
-import { UserRole } from './entities/user-role.entity';
+import { WalletsModule } from './wallets/wallets.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
+      global: true,
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
@@ -40,8 +40,9 @@ import { UserRole } from './entities/user-role.entity';
         username: configService.get('DATABASE_USER'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User, UserToken, Listing, ViewHistory, Booking, Review, UserRole],
+        entities: [path.join(__dirname, 'entities', '*.entity{.ts,.js}')],
         synchronize: false,
+        namingStrategy: new SnakeNamingStrategy(),
       }),
       inject: [ConfigService],
     }),
@@ -50,6 +51,9 @@ import { UserRole } from './entities/user-role.entity';
     BookingsModule,
     ReviewsModule,
     UsersModule,
+    WalletsModule,
+    NotificationsModule,
+    SubscriptionsModule,
   ],
 })
 export class AppModule {}

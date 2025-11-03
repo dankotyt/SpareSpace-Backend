@@ -12,33 +12,29 @@ export class User {
   phone: string;
 
   @Column()
-  password_hash: string;
+  passwordHash: string;
 
   @Column()
-  first_name: string;
+  firstName: string;
 
   @Column()
-  last_name: string;
+  lastName: string;
 
-  @Column({ nullable: true })
+  @Column()
   patronymic?: string;
 
-  @Column({ type: 'decimal', precision: 3, scale: 2, nullable: true, default: 0 })
-  rating: number;
+  @Column({ type: 'decimal', precision: 3, scale: 2, nullable: true })
+  rating?: number;
 
   @Column({ default: false })
-  two_fa_enabled: boolean;
+  twoFaEnabled: boolean;
 
   @Column({ default: false })
   verified: boolean;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updated_at: Date;
-
-  get full_name(): string {
-    return `${this.first_name} ${this.last_name} ${this.patronymic || ''}`.trim();
-  }
+  updatedAt: Date;
 }

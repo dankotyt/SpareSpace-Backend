@@ -6,6 +6,7 @@ import { Booking } from '../entities/booking.entity';
 import { User } from '../entities/user.entity';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { SearchReviewsDto } from './dto/search-reviews.dto';
+import { BookingStatus } from '../common/enums/booking-status.enum';
 
 @Injectable()
 export class ReviewsService {
@@ -21,7 +22,7 @@ export class ReviewsService {
       relations: ['listing', 'renter', 'listing.user'],
     });
     if (!booking) throw new NotFoundException('Booking not found');
-    if (booking.status !== 'COMPLETED') throw new BadRequestException('Only completed bookings can be reviewed');
+    if (booking.status !== BookingStatus.COMPLETED) throw new BadRequestException('Only completed bookings can be reviewed');
 
     const isRenter = booking.renter.id === userId;
     const isLandlord = booking.listing.user.id === userId;
@@ -36,8 +37,8 @@ export class ReviewsService {
     const existingReview = await this.reviewRepository.findOne({
       where: {
         listing: { id: booking.listing.id },
-        from_user: { id: userId },
-        to_user: { id: toUserId },
+        fromUser: { id: userId },
+        toUser: { id: toUserId },
       },
     });
     if (existingReview) throw new ConflictException('Review already exists for this booking');
@@ -48,8 +49,8 @@ export class ReviewsService {
     
     return this.reviewRepository.create({
       listing: booking.listing,
-      from_user: { id: userId },
-      to_user: { id: toUserId },
+      fromUser: { id: userId },
+      toUser: { id: toUserId },
       rating: dto.rating,
       text: dto.text,
     });
@@ -57,21 +58,31 @@ export class ReviewsService {
 
   private buildSearchQuery(searchDto: SearchReviewsDto) {
     const query = this.reviewRepository.createQueryBuilder('review')
-      .leftJoinAndSelect('review.from_user', 'fromUser')
-      .leftJoinAndSelect('review.to_user', 'toUser')
+      .leftJoinAndSelect('review.fromUser', 'fromUser')
+      .leftJoinAndSelect('review.toUser', 'toUser')
       .leftJoinAndSelect('review.listing', 'listing');
 
-    if (searchDto.to_user_id) query.andWhere('review.to_user.id = :toUserId', { toUserId: searchDto.to_user_id });
-    if (searchDto.listing_id) query.andWhere('review.listing.id = :listingId', { listingId: searchDto.listing_id });
+    if (searchDto.toUserId) {
+      query.andWhere({ toUser: { id: searchDto.toUserId } });
+    }
 
-    if (searchDto.limit) query.limit(searchDto.limit);
-    if (searchDto.offset) query.offset(searchDto.offset);
+    if (searchDto.listingId) {
+      query.andWhere({ listing: { id: searchDto.listingId } });
+    }
+
+    if (searchDto.limit) {
+      query.limit(searchDto.limit);
+    }
+
+    if (searchDto.offset) {
+      query.offset(searchDto.offset);
+    }
 
     return query;
   }
 
   async create(dto: CreateReviewDto, userId: number) {
-    const booking = await this.validateBookingForReview(dto.booking_id, userId);
+    const booking = await this.validateBookingForReview(dto.bookingId, userId);
     await this.validateNoExistingReview(booking, userId);
     
     const review = await this.createReviewEntity(dto, booking, userId);
@@ -87,7 +98,7 @@ export class ReviewsService {
   async findOne(id: number) {
     const review = await this.reviewRepository.findOne({
       where: { id },
-      relations: ['from_user', 'to_user', 'listing'],
+      relations: ['fromUser', 'toUser', 'listing'],
     });
     if (!review) throw new NotFoundException('Review not found');
     return review;

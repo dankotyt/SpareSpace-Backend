@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Query, UseGuards, HttpCode } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { SearchReviewsDto } from './dto/search-reviews.dto';
@@ -11,6 +11,7 @@ export class ReviewsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
+  @HttpCode(201)
   create(@Body() createReviewDto: CreateReviewDto, @User('userId') userId: number) {
     return this.reviewsService.create(createReviewDto, userId);
   }

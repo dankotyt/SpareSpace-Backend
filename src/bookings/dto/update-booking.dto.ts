@@ -1,4 +1,14 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateBookingDto } from './create-booking.dto';
+import { IsDate, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class UpdateBookingDto extends PartialType(CreateBookingDto) {}
+export class UpdateBookingDto {
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  startDate?: Date;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  endDate?: Date;
+}
