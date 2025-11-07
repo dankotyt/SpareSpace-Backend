@@ -215,7 +215,8 @@ CREATE TABLE messages (
     sender_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     text TEXT NOT NULL,
     is_read BOOLEAN DEFAULT FALSE,
-    sent_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    sent_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    read_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE INDEX idx_messages_conversation_id ON messages(conversation_id);

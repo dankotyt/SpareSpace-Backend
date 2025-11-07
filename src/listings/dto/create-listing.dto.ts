@@ -4,7 +4,7 @@ import { ListingType } from '../../common/enums/listing-type.enum';
 import { CurrencyType } from '../../common/enums/currency-type.enum';
 import { ListingPeriodType } from '../../common/enums/listing-period-type.enum';
 
-class AvailabilityPeriodDto {
+export class AvailabilityPeriodDto {
   @Type(() => Date)
   @IsDate()
   start: Date;
@@ -39,12 +39,14 @@ export class CreateListingDto {
 
   @IsOptional()
   @IsNumber()
+  @Type(() => Number)
   @Min(-90)
   @Max(90)
   latitude?: number;
 
   @IsOptional()
   @IsNumber()
+  @Type(() => Number)
   @Min(-180)
   @Max(180)
   longitude?: number;

@@ -21,6 +21,12 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
+  @Post('check-phone-login')
+  @HttpCode(200)
+  async checkPhoneLogin(@Body('phone') phone: string) {
+    return this.authService.checkPhoneLogin(phone);
+  }
+
   @Post('refresh')
   @HttpCode(200)
   async refresh(@Body('refreshToken') refreshToken: string) {

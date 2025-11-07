@@ -1,4 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { UserRole } from './user-role.entity';
+import { UserRoleType } from '../common/enums/user-role-type.enum';
 
 @Entity('users')
 export class User {
@@ -37,4 +39,11 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
+
+  @OneToMany(() => UserRole, (userRole) => userRole.user)
+  userRoles: UserRole[];
+
+  get roles(): UserRoleType[] {
+    return this.userRoles?.map((userRole) => userRole.role) || [];
+  }
 }

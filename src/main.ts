@@ -1,13 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { CustomIoAdapter } from './adapters/custom-io.adapter';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true,
-    whitelist: true
-  }));
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+
+  app.useWebSocketAdapter(
+    new CustomIoAdapter(app, {
+      cors: {
+        origin: '*', // потом заменить на конкретный домен (для продакшена)
+      },
+      path: '/socket.io/',
+      transports: ['polling', 'websocket'],
+      serveClient: false,
+    }),
+  );
+
+  await app.listen(configService.get('PORT', 3000));
 }
 bootstrap();

@@ -14,6 +14,7 @@ import { UsersModule } from './users/users.module';
 import { WalletsModule } from './wallets/wallets.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { SubscriptionsModule } from './subscriptions/subscriptions.module';
     WalletsModule,
     NotificationsModule,
     SubscriptionsModule,
+    ChatModule,
   ],
 })
 export class AppModule {}

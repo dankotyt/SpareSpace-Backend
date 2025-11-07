@@ -40,6 +40,12 @@ export class AuthService {
     if (exists) throw new ConflictException('Phone already exists');
   }
 
+  async checkPhoneLogin(phone: string): Promise<{ exists: boolean }> {
+    const cleanedPhone = phone.replace(/[\s\-]/g, '');
+    const user = await this.userRepository.findOneBy({ phone: cleanedPhone });
+    return { exists: !!user };
+  }
+
   private async createUser(dto: RegisterDto) {
     const hash = await bcrypt.hash(dto.password, this.BCRYPT_SALT_ROUNDS);
     const user = this.userRepository.create({
@@ -49,6 +55,7 @@ export class AuthService {
       lastName: dto.lastName,
       patronymic: dto.patronymic,
       passwordHash: hash,
+      rating: 0,
     });
     return this.userRepository.save(user);
   }
