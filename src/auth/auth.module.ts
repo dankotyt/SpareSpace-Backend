@@ -8,6 +8,7 @@ import { UserToken } from '../entities/user-token.entity';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { OptionalJwtGuard } from './optional-jwt.guard';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { JwtAuthGuard } from './jwt-auth.guard';
     UsersModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtAuthGuard],
-  exports: [JwtAuthGuard]
+  providers: [AuthService, JwtStrategy, JwtAuthGuard, OptionalJwtGuard],
+  exports: [JwtAuthGuard, OptionalJwtGuard]
 })
 export class AuthModule {}

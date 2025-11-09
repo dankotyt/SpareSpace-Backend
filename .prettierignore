@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+build/
+*.tgz
+*.tar.gz
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+*.pdf
+
+# Database
+*.sql
+migrations/
+
+# Lock files (обычно форматируют, но можно игнорировать)
+# package-lock.json
+# yarn.lock
+
+# NestJS generated
+*.d.ts
